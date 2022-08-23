@@ -8,24 +8,24 @@ import (
 	"strings"
 )
 
-type GoStr string
+type Str string
 
-func New(str string) GoStr {
-	return GoStr(str)
+func New[T string | []byte | []rune](str T) Str {
+	return Str(str)
 }
 
-// ToString convert goStr to string
-func (str GoStr) ToString() string {
+// ToString convert Str to string
+func (str Str) ToString() string {
 	return string(str)
 }
 
-// In  check if substr is in goStr.
-func (str GoStr) In(substr GoStr) bool {
+// In  check if substr is in Str.
+func (str Str) In(substr Str) bool {
 	return strings.Contains(str.ToString(), substr.ToString())
 }
 
 // Capitalize Convert the first letter to uppercase
-func (str GoStr) Capitalize() GoStr {
+func (str Str) Capitalize() Str {
 	if str.Len() == 0 {
 		return ""
 	}
@@ -38,33 +38,33 @@ func (str GoStr) Capitalize() GoStr {
 }
 
 // StartsWith tests whether the string s begins with prefix.
-func (str GoStr) StartsWith(prefix GoStr) bool {
+func (str Str) StartsWith(prefix Str) bool {
 	return strings.HasPrefix(str.ToString(), prefix.ToString())
 }
 
 // EndsWith tests whether the string s ends with suffix.
-func (str GoStr) EndsWith(suffix GoStr) bool {
+func (str Str) EndsWith(suffix Str) bool {
 	return strings.HasSuffix(str.ToString(), suffix.ToString())
 }
 
 // Find returns the index of the first instance of substr in s, or -1 if substr is not present in s.
-func (str GoStr) Find(substr GoStr) int {
+func (str Str) Find(substr Str) int {
 	return strings.Index(str.ToString(), substr.ToString())
 }
 
 // Count counts the number of non-overlapping instances of substr in s.
 // If substr is an empty string, Count returns 1 + the number of Unicode code points in s.
-func (str GoStr) Count(substr GoStr) int {
+func (str Str) Count(substr Str) int {
 	return strings.Count(substr.ToString(), substr.ToString())
 }
 
 // Len return string length
-func (str GoStr) Len() int {
+func (str Str) Len() int {
 	return len(str)
 }
 
 // Lower returns s with all Unicode letters mapped to their lower case.
-func (str GoStr) Lower() GoStr {
+func (str Str) Lower() Str {
 	value := strings.ToLower(str.ToString())
 	return New(value)
 }
@@ -74,59 +74,59 @@ func (str GoStr) Lower() GoStr {
 // If old is empty, it matches at the beginning of the string
 // and after each UTF-8 sequence, yielding up to k+1 replacements
 // for a k-rune string.
-func (str GoStr) Replace(old, new GoStr) GoStr {
+func (str Str) Replace(old, new Str) Str {
 	value := strings.ReplaceAll(str.ToString(), old.ToString(), new.ToString())
 	return New(value)
 }
 
 // IsALNum Returns True if the string has at least one character and
 // all characters are letters or numbers, otherwise returns False
-func (str GoStr) IsALNum() bool {
+func (str Str) IsALNum() bool {
 	return _AllNum.MatchString(str.ToString())
 }
 
 // IsAlpha Returns True if the string has at least one character and all characters
 // are alphabets or Chinese characters, otherwise returns False
-func (str GoStr) IsAlpha() bool {
+func (str Str) IsAlpha() bool {
 	return _Alpha.MatchString(str.ToString())
 }
 
 // IsDigit Returns True if the string contains only numbers, otherwise returns False
-func (str GoStr) IsDigit() bool {
+func (str Str) IsDigit() bool {
 	return _Digit.MatchString(str.ToString())
 }
 
 // IsLower Returns True if the string contains at least one case-sensitive character and all
 // of those (case-sensitive) characters are lowercase, False otherwise
-func (str GoStr) IsLower() bool {
+func (str Str) IsLower() bool {
 	return _Lower.MatchString(str.ToString())
 }
 
 // IsNumeric Returns True if the string contains only numeric characters, otherwise returns False
-func (str GoStr) IsNumeric() bool {
+func (str Str) IsNumeric() bool {
 	return _Numeric.MatchString(str.ToString())
 }
 
 // IsSpace Returns True if the string contains only whitespace, otherwise returns False.
-func (str GoStr) IsSpace() bool {
+func (str Str) IsSpace() bool {
 	return strings.TrimSpace(str.ToString()) == ""
 }
 
 // IsUpper Returns True if the string contains at least one case-sensitive character
 // and all of those (case-sensitive) characters are uppercase, False otherwise
-func (str GoStr) IsUpper() bool {
+func (str Str) IsUpper() bool {
 	return _Upper.MatchString(str.ToString())
 }
 
 // Join concatenates the elements of its first argument to create a single string. The separator
 // string sep is placed between elements in the resulting string.
-func (str GoStr) Join(elems []string) GoStr {
+func (str Str) Join(elems []string) Str {
 	return New(strings.Join(elems, str.ToString()))
 }
 
 // Strip returns a slice of the string s with all leading and
 // trailing Unicode code points contained in cut removed.
-func (str GoStr) Strip(cut GoStr) GoStr {
+func (str Str) Strip(cut Str) Str {
 	return New(strings.Trim(str.ToString(), cut.ToString()))
 }
 
@@ -134,13 +134,13 @@ func (str GoStr) Strip(cut GoStr) GoStr {
 // Unicode code points contained in cut removed.
 //
 // To remove a prefix, use TrimPrefix instead.
-func (str GoStr) LStrip(cut GoStr) GoStr {
+func (str Str) LStrip(cut Str) Str {
 	return New(strings.TrimLeft(str.ToString(), cut.ToString()))
 }
 
 // TrimPrefix returns s without the provided leading prefix string.
 // If s doesn't start with prefix, s is returned unchanged.
-func (str GoStr) TrimPrefix(prefix GoStr) GoStr {
+func (str Str) TrimPrefix(prefix Str) Str {
 	return New(strings.TrimPrefix(str.ToString(), prefix.ToString()))
 }
 
@@ -148,13 +148,13 @@ func (str GoStr) TrimPrefix(prefix GoStr) GoStr {
 // Unicode code points contained in cut removed.
 //
 // To remove a suffix, use TrimSuffix instead.
-func (str GoStr) RStrip(cut GoStr) GoStr {
+func (str Str) RStrip(cut Str) Str {
 	return New(strings.TrimRight(str.ToString(), cut.ToString()))
 }
 
 // TrimSuffix returns s without the provided trailing suffix string.
 // If s doesn't end with suffix, s is returned unchanged.
-func (str GoStr) TrimSuffix(suffix GoStr) GoStr {
+func (str Str) TrimSuffix(suffix Str) Str {
 	return New(strings.TrimSuffix(str.ToString(), suffix.ToString()))
 }
 
@@ -171,9 +171,9 @@ func (str GoStr) TrimSuffix(suffix GoStr) GoStr {
 // as described in the documentation for Split.
 //
 // To split around the first instance of a separator, see Cut.
-func (str GoStr) Split(sep GoStr, num int) []GoStr {
+func (str Str) Split(sep Str, num int) []Str {
 	value := strings.SplitN(str.ToString(), sep.ToString(), num)
-	var values = make([]GoStr, len(value))
+	var values = make([]Str, len(value))
 	for i := 0; i < len(value); i++ {
 		values[i] = New(value[i])
 	}
@@ -181,12 +181,12 @@ func (str GoStr) Split(sep GoStr, num int) []GoStr {
 }
 
 // Upper returns s with all Unicode letters mapped to their upper case.
-func (str GoStr) Upper() GoStr {
+func (str Str) Upper() Str {
 	return New(strings.ToUpper(str.ToString()))
 }
 
 // Index similar python string index
-func (str GoStr) Index(start int, end int) GoStr {
+func (str Str) Index(start int, end int) Str {
 	if end > 0 {
 		if end < start {
 			panic("end must > 0 and < start")
@@ -205,17 +205,17 @@ func (str GoStr) Index(start int, end int) GoStr {
 
 // Title returns a copy of the string s with all Unicode letters mapped to
 // their Unicode title case.
-func (str GoStr) Title() GoStr {
+func (str Str) Title() Str {
 	return New(strings.ToTitle(str.ToString()))
 }
 
 // Runes Convert []rune in a string
-func (str GoStr) Runes() []rune {
+func (str Str) Runes() []rune {
 	return []rune(str)
 }
 
 // SwapCase Convert uppercase to lowercase and lowercase to uppercase in a string
-func (str GoStr) SwapCase() GoStr {
+func (str Str) SwapCase() Str {
 	lower := str.Lower().Runes()
 	upper := str.Upper().Runes()
 
