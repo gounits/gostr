@@ -5,6 +5,8 @@ package gostr
 
 import (
 	"fmt"
+	"github.com/gounits/gostr/internal"
+	"math"
 	"strings"
 )
 
@@ -230,4 +232,18 @@ func (str Str) SwapCase() Str {
 	}
 
 	return New(string(values))
+}
+
+// Levenshtein Fastest levenshtein implementation in Go.
+//
+// this implementation is currently not thread safe,
+// and it assumes that the runes only go up to 65535. This will be fixed soon.
+// [Algorithm] https://github.com/ka-weihe/fast-levenshtein
+func (str Str) Levenshtein(s Str) float64 {
+	max := math.Max(float64(len(str)), float64(len(s)))
+	if max == 0 {
+		return 0
+	}
+	value := internal.Distance(str.ToString(), s.ToString())
+	return (max - float64(value)) / max
 }

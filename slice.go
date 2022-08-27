@@ -35,3 +35,38 @@ func (s Slice) Deduplication() Slice {
 
 	return values
 }
+
+// In Check if a string is in an array
+func (s Slice) In(sub Str) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] == sub {
+			return true
+		}
+	}
+	return false
+}
+
+// ToString convert String type
+func (s Slice) ToString() []string {
+	var values = make([]string, len(s))
+
+	for index, value := range s {
+		values[index] = value.ToString()
+	}
+	return values
+}
+
+// SetIntersection  Get the intersection of s and s1
+func (s Slice) SetIntersection(s1 Slice) Slice {
+	s1Set := s.ToSet()
+
+	s2Set := s1.ToSet()
+
+	var s2 Slice
+	for key := range s1Set {
+		if _, ok := s2Set[key]; ok {
+			s2 = append(s2, key)
+		}
+	}
+	return s2
+}
