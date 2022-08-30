@@ -70,3 +70,18 @@ func (s Slice) SetIntersection(s1 Slice) Slice {
 	}
 	return s2
 }
+
+// Reverse copy Any slice and positions reverse
+func (s Slice) Reverse() Slice {
+	cr := make(Slice, len(s))
+	for j, i := 0, len(s)-1; i >= 0; i, j = i-1, j+1 {
+		cr[j] = cr[i]
+	}
+	return cr
+}
+
+// Join concatenates the elements of its first argument to create a single string. The separator
+// string sep is placed between elements in the resulting string.
+func (s Slice) Join(sep Str) Str {
+	return sep.Join(s.ToString())
+}

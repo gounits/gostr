@@ -121,7 +121,7 @@ func (str Str) IsUpper() bool {
 }
 
 // Join concatenates the elements of its first argument to create a single string. The separator
-// string sep is placed between elements in the resulting string.
+// string str is placed between elements in the resulting string.
 func (str Str) Join(elems []string) Str {
 	return New(strings.Join(elems, str.ToString()))
 }
