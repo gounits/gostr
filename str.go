@@ -12,7 +12,8 @@ import (
 
 type Str string
 
-func New[T string | []byte | []rune](str T) Str {
+// New create new Str object
+func New(str string) Str {
 	return Str(str)
 }
 
