@@ -51,6 +51,9 @@ func TestSlice_In(t *testing.T) {
 	if !Slice.In("hello") {
 		panic("test Slice.In error")
 	}
+	if Slice.In("love") {
+		panic("test Slice.In error")
+	}
 }
 
 func TestSlice_Join(t *testing.T) {

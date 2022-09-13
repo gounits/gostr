@@ -14,7 +14,12 @@ var Set gostr.Set
 func TestSet_Add(t *testing.T) {
 	old := gostr.NewSet([]string{"a", "a"})
 	old.Add("a")
-	if !reflect.DeepEqual(old, gostr.NewSet([]string{"a"})) {
+	old.Add("b")
+	s1 := old.Keys()
+	s1 = s1.Sort(func(pre, next int) bool {
+		return s1[pre] < s1[next]
+	})
+	if !reflect.DeepEqual(s1, gostr.NewSlice([]string{"a", "b"})) {
 		panic("test Set.Add Error")
 	}
 }
@@ -31,6 +36,9 @@ func TestSet_In(t *testing.T) {
 
 func TestSet_Keys(t *testing.T) {
 	s1 := Set.Keys()
+	s1 = s1.Sort(func(pre, next int) bool {
+		return s1[pre] < s1[next]
+	})
 	if !reflect.DeepEqual(s1, gostr.Slice{"a", "b"}) {
 		panic("test Set.Keys Error")
 	}
@@ -43,7 +51,11 @@ func TestSet_Len(t *testing.T) {
 }
 
 func TestSet_ToSlice(t *testing.T) {
-	if !reflect.DeepEqual(Set.ToSlice(), gostr.Slice{"a", "b"}) {
+	s1 := Set.ToSlice()
+	s1 = s1.Sort(func(pre, next int) bool {
+		return s1[pre] < s1[next]
+	})
+	if !reflect.DeepEqual(s1, gostr.Slice{"a", "b"}) {
 		panic("test Set.ToSlice Error")
 	}
 }
