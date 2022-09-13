@@ -8,9 +8,11 @@ type Set map[Str]struct{}
 // NewSet new Set object of Str
 //
 // Notice: Set is disorder!
-func NewSet(s ...Str) Set {
+func NewSet[T ~[]E, E Stringer](s T) Set {
 	m := make(Set, len(s))
-	m.Add(s...)
+	for _, e := range s {
+		m[New(e)] = struct{}{}
+	}
 	return m
 }
 
@@ -25,14 +27,14 @@ func (s Set) Add(elems ...Str) {
 
 // ToSlice convert Slice type
 func (s Set) ToSlice() Slice {
-	return NewSlice(s.Keys()...)
+	return NewSlice(s.Keys())
 }
 
 // Keys get all elements
 //
 // Notice: this is disorder!
-func (s Set) Keys() []Str {
-	var key []Str
+func (s Set) Keys() Slice {
+	var key Slice
 	for k := range s {
 		key = append(key, k)
 	}

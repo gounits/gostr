@@ -8,8 +8,17 @@ import "regexp"
 var (
 	_AllNum  = regexp.MustCompile("^[0-9a-zA-Z]+$")
 	_Alpha   = regexp.MustCompile("^[a-zA-Z\\p{Han}]+$")
-	_Digit   = regexp.MustCompile("^[0-9]+$")
 	_Lower   = regexp.MustCompile("^[a-z]+$")
 	_Numeric = regexp.MustCompile("^[0-9]+$")
 	_Upper   = regexp.MustCompile("^[A-Z]+$")
 )
+
+// Stringer contains all characters type
+type Stringer interface {
+	~string | []byte | []rune
+}
+
+// Joiner String join interface
+type Joiner interface {
+	Str() Str
+}

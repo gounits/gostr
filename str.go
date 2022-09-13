@@ -4,16 +4,17 @@
 package gostr
 
 import (
-	"fmt"
+	"errors"
 	"github.com/gounits/gostr/internal"
 	"math"
+	"strconv"
 	"strings"
 )
 
 type Str string
 
 // New create new Str object
-func New(str string) Str {
+func New[T Stringer](str T) Str {
 	return Str(str)
 }
 
@@ -58,7 +59,7 @@ func (str Str) Find(substr Str) int {
 // Count counts the number of non-overlapping instances of substr in s.
 // If substr is an empty string, Count returns 1 + the number of Unicode code points in s.
 func (str Str) Count(substr Str) int {
-	return strings.Count(substr.ToString(), substr.ToString())
+	return strings.Count(str.ToString(), substr.ToString())
 }
 
 // Len return string length
@@ -94,9 +95,12 @@ func (str Str) IsAlpha() bool {
 	return _Alpha.MatchString(str.ToString())
 }
 
-// IsDigit Returns True if the string contains only numbers, otherwise returns False
-func (str Str) IsDigit() bool {
-	return _Digit.MatchString(str.ToString())
+// Digit Returns int if the string contains only numbers, otherwise returns Error
+func (str Str) Digit() (int, error) {
+	if !str.IsNumeric() {
+		return 0, errors.New("not is number")
+	}
+	return strconv.Atoi(str.ToString())
 }
 
 // IsLower Returns True if the string contains at least one case-sensitive character and all
@@ -161,26 +165,11 @@ func (str Str) TrimSuffix(suffix Str) Str {
 	return New(strings.TrimSuffix(str.ToString(), suffix.ToString()))
 }
 
-// Split slices s into substrings separated by sep and returns a slice of
+// Split slices s into all substrings separated by sep and returns a slice of
 // the substrings between those separators.
-//
-// The count determines the number of substrings to return:
-//
-//	n > 0: at most n substrings; the last substring will be the unSplit remainder.
-//	n == 0: the result is nil (zero substrings)
-//	n < 0: all substrings
-//
-// Edge cases for s and sep (for example, empty strings) are handled
-// as described in the documentation for Split.
-//
-// To split around the first instance of a separator, see Cut.
-func (str Str) Split(sep Str, num int) []Str {
-	value := strings.SplitN(str.ToString(), sep.ToString(), num)
-	var values = make([]Str, len(value))
-	for i := 0; i < len(value); i++ {
-		values[i] = New(value[i])
-	}
-	return values
+func (str Str) Split(sep Str) Slice {
+	value := strings.Split(str.ToString(), sep.ToString())
+	return NewSlice(value)
 }
 
 // Upper returns s with all Unicode letters mapped to their upper case.
@@ -190,20 +179,29 @@ func (str Str) Upper() Str {
 
 // Index similar python string index
 func (str Str) Index(start int, end int) Str {
-	if end > 0 {
-		if end < start {
-			panic("end must > 0 and < start")
-		} else {
-			value := str.ToString()[start:end]
-			return New(value)
-		}
+	length := str.Len()
+
+	// return Str.Len if end == 0
+	if end == 0 {
+		end = length
+	} else if end < 0 {
+		end += length
 	}
-	ends := len(str) - end
-	if ends > 0 {
-		return str.Index(start, ends)
-	} else {
-		panic(fmt.Sprintf("flashback index exceeds string length : %d < %d", len(str), -end))
+
+	if start < 0 {
+		start += length
 	}
+
+	if start > end || end > length {
+		panic("end index must > start index,and < length")
+	}
+
+	if start < 0 || end < 0 {
+		panic("index format error")
+	}
+
+	value := str.ToString()[start:end]
+	return New(value)
 }
 
 // Title returns a copy of the string s with all Unicode letters mapped to
@@ -247,4 +245,18 @@ func (str Str) Levenshtein(s Str) float64 {
 	}
 	value := internal.Distance(str.ToString(), s.ToString())
 	return (max - float64(value)) / max
+}
+
+// Eq compares two strings to be the same and not null.
+// Notice: ignoring strings case.
+func (str Str) Eq(s Str) bool {
+	flag := strings.EqualFold(str.TrimSpace().ToString(), s.TrimSpace().ToString())
+	return flag
+}
+
+// TrimSpace returns a slice of the string s, with all leading
+// and trailing white space removed, as defined by Unicode.
+func (str Str) TrimSpace() Str {
+	s := strings.TrimSpace(str.ToString())
+	return New(s)
 }

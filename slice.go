@@ -11,25 +11,32 @@ import (
 type Slice []Str
 
 // NewSlice create a slice of Str
-func NewSlice(t ...Str) Slice {
+// NewSlice create a slice of string
+func NewSlice[T ~[]E, E Stringer](t T) Slice {
 	var values = make(Slice, len(t))
 	for index, value := range t {
-		values[index] = value
+		values[index] = New(value)
 	}
 	return values
 }
 
 // ToSet convert strings slice to set
 func (s Slice) ToSet() Set {
-	return NewSet(s...)
+	return NewSet(s)
 }
 
 // Deduplication Remove duplicate data from string slice and return
+// Notice: order
 func (s Slice) Deduplication() Slice {
 	var values Slice
 
-	for key := range s.ToSet() {
-		values = append(values, key)
+	flag := make(map[Str]struct{}, s.Len())
+
+	for _, key := range s {
+		if _, ok := flag[key]; !ok {
+			values = append(values, key)
+			flag[key] = struct{}{}
+		}
 	}
 
 	return values
@@ -72,11 +79,14 @@ func (s Slice) SetIntersection(s1 Slice) Slice {
 
 // Reverse copy Any slice and positions reverse
 func (s Slice) Reverse() Slice {
-	cr := make(Slice, len(s))
-	for j, i := 0, len(s)-1; i >= 0; i, j = i-1, j+1 {
-		cr[j] = cr[i]
+	s1 := s.Clone()
+	length := s1.Len()
+	for i, j := 0, length-1; i < j; i, j = i+1, j-1 {
+		flag := s1[i]
+		s1[i] = s1[j]
+		s1[j] = flag
 	}
-	return cr
+	return s1
 }
 
 // Join concatenates the elements of its first argument to create a single string. The separator
@@ -126,9 +136,21 @@ func (s Slice) Delete(ele Str) (ns Slice, err error) {
 			ns = ns.Append(key)
 		}
 	}
-
-	if s.Len() == ns.Len() {
-		err = errors.New("ele not exits in slice")
-	}
 	return
+}
+
+// Eq compares two Slice to be same.
+// Notice: ignoring String case from Slice.
+func (s Slice) Eq(s1 Slice) bool {
+	if s.Len() != s1.Len() {
+		return false
+	}
+
+	for i := 0; i < s.Len(); i++ {
+		if !s[i].Eq(s1[i]) {
+			return false
+		}
+	}
+
+	return true
 }
