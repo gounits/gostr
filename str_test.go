@@ -14,6 +14,7 @@ var test gostr.Str
 func TestMain(m *testing.M) {
 	test = gostr.New("hello world!")
 	Slice = gostr.NewSlice([]string{"hello", "world", "hello", "china"})
+	Set = gostr.NewSet([]string{"a", "a", "b"})
 	m.Run()
 }
 

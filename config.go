@@ -17,8 +17,3 @@ var (
 type Stringer interface {
 	~string | []byte | []rune
 }
-
-// Joiner String join interface
-type Joiner interface {
-	Str() Str
-}
