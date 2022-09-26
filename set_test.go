@@ -12,9 +12,7 @@ import (
 var Set gostr.Set
 
 func TestSet_Add(t *testing.T) {
-	old := gostr.NewSet([]string{"a", "a"})
-	old.Add("a")
-	old.Add("b")
+	old := Set.Add("a", "b")
 	s1 := old.Keys()
 	s1 = s1.Sort(func(pre, next int) bool {
 		return s1[pre] < s1[next]
@@ -57,5 +55,19 @@ func TestSet_ToSlice(t *testing.T) {
 	})
 	if !reflect.DeepEqual(s1, gostr.Slice{"a", "b"}) {
 		panic("test Set.ToSlice Error")
+	}
+}
+
+func TestSet_SetIntersection(t *testing.T) {
+	s1 := Set.Intersection(gostr.NewSet([]string{"a", "h"}))
+	if !reflect.DeepEqual(s1, gostr.NewSet([]string{"a"})) {
+		panic("test Slice.SetIntersection Error")
+	}
+}
+
+func TestSet_Union(t *testing.T) {
+	s1 := Set.Union(gostr.NewSet([]string{"a", "h"}))
+	if !reflect.DeepEqual(s1, gostr.NewSet([]string{"a", "b", "h"})) {
+		panic("test Slice.SetIntersection Error")
 	}
 }

@@ -89,13 +89,6 @@ func TestSlice_Sort(t *testing.T) {
 	}
 }
 
-func TestSlice_SetIntersection(t *testing.T) {
-	s1 := Slice.SetIntersection(gostr.NewSlice([]string{"hello", "you"}))
-	if !reflect.DeepEqual(s1, gostr.NewSlice([]string{"hello"})) {
-		panic("test Slice.SetIntersection Error")
-	}
-}
-
 func TestSlice_ToString(t *testing.T) {
 	if !reflect.DeepEqual(Slice.ToString(), []string{"hello", "world", "hello", "china"}) {
 		panic("test Slice.ToString error")
@@ -105,5 +98,12 @@ func TestSlice_ToString(t *testing.T) {
 func TestSlice_Eq(t *testing.T) {
 	if !Slice.Eq(gostr.Slice{"hello", "world", "hello", "china"}) {
 		panic("test Slice.Eq error")
+	}
+}
+
+func TestSlice_Counter(t *testing.T) {
+	predict := Slice.Counter()
+	if predict["hello"] == 1 {
+		panic("test Slice.Counter error")
 	}
 }

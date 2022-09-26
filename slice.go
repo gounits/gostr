@@ -62,21 +62,6 @@ func (s Slice) ToString() []string {
 	return values
 }
 
-// SetIntersection  Get the intersection of s and s1
-func (s Slice) SetIntersection(s1 Slice) Slice {
-	s1Set := s.ToSet()
-
-	s2Set := s1.ToSet()
-
-	var s2 Slice
-	for key := range s1Set {
-		if _, ok := s2Set[key]; ok {
-			s2 = append(s2, key)
-		}
-	}
-	return s2
-}
-
 // Reverse copy Any slice and positions reverse
 func (s Slice) Reverse() Slice {
 	s1 := s.Clone()
@@ -153,4 +138,13 @@ func (s Slice) Eq(s1 Slice) bool {
 	}
 
 	return true
+}
+
+// Counter counts the number of elements
+func (s Slice) Counter() map[Str]int {
+	var m = make(map[Str]int, len(s))
+	for _, key := range s {
+		m[key] += 1
+	}
+	return m
 }

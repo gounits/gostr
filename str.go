@@ -207,7 +207,7 @@ func (str Str) Index(start int, end int) Str {
 // Title returns a copy of the string s with all Unicode letters mapped to
 // their Unicode title case.
 func (str Str) Title() Str {
-	return New(strings.ToTitle(str.ToString()))
+	return New(strings.Title(str.ToString()))
 }
 
 // Runes Convert []rune in a string

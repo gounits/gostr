@@ -133,7 +133,7 @@ func TestStr_IsUpper(t *testing.T) {
 }
 
 func TestStr_Title(t *testing.T) {
-	if test.Title() != "HELLO WORLD!" {
+	if test.Title() != "Hello World!" {
 		panic("test Str.Title error")
 	}
 }
