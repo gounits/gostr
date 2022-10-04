@@ -80,9 +80,7 @@ func TestSlice_Reverse(t *testing.T) {
 }
 
 func TestSlice_Sort(t *testing.T) {
-	s1 := Slice.Sort(func(pre, next int) bool {
-		return Slice[pre] >= Slice[next]
-	})
+	s1 := Slice.CharSort(true)
 
 	if !reflect.DeepEqual(s1, gostr.NewSlice([]string{"world", "hello", "hello", "china"})) {
 		panic("test Slice.Sort Error")
@@ -105,5 +103,12 @@ func TestSlice_Counter(t *testing.T) {
 	predict := Slice.Counter()
 	if predict["hello"] == 1 {
 		panic("test Slice.Counter error")
+	}
+}
+
+func TestSlice_CharSort(t *testing.T) {
+	s1 := Slice.CharSort(false)
+	if !reflect.DeepEqual(s1, gostr.NewSlice([]string{"china", "hello", "hello", "world"})) {
+		panic("test Slice.CharSort error")
 	}
 }

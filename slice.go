@@ -97,13 +97,18 @@ func (s Slice) Clone() Slice {
 	return append(Slice(nil), s...)
 }
 
-// Sort sorts the Slice given the rule function.
-//
-// the rule function must satisfy the same requirements at the interface
-// type's Rule function.
-func (s Slice) Sort(rule func(pre, next int) bool) Slice {
+// CharSort character sorting,default ascending
+func (s Slice) CharSort(descending bool) Slice {
 	c := s.Clone()
-	sort.Slice(c, rule)
+	if descending {
+		sort.Slice(c, func(i, j int) bool {
+			return c[i] > c[j]
+		})
+	} else {
+		sort.Slice(c, func(i, j int) bool {
+			return c[i] < c[j]
+		})
+	}
 	return c
 }
 
