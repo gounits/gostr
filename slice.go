@@ -153,3 +153,35 @@ func (s Slice) Counter() map[Str]int {
 	}
 	return m
 }
+
+// Index similar python string index
+func (s Slice) Index(start int, end int) Slice {
+	length := s.Len()
+
+	// return Str.Len if end == 0
+	if end == 0 {
+		end = length
+	} else if end < 0 {
+		end += length
+	}
+
+	if start < 0 {
+		start += length
+	}
+
+	if start > end || end > length {
+		panic("end index must > start index,and < length")
+	}
+
+	if start < 0 || end < 0 {
+		panic("index format error")
+	}
+
+	value := s[start:end]
+	return value
+}
+
+// POP get the last element
+func (s Slice) POP() (ns Slice, ele Str) {
+	return s.Index(0, -1), s[s.Len()-1]
+}

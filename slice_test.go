@@ -112,3 +112,21 @@ func TestSlice_CharSort(t *testing.T) {
 		panic("test Slice.CharSort error")
 	}
 }
+
+func TestSlice_Index(t *testing.T) {
+	s1 := Slice.Index(0, -1)
+	if !reflect.DeepEqual(s1, gostr.NewSlice([]string{"hello", "world", "hello"})) {
+		panic("test Slice.Index error")
+	}
+}
+
+func TestSlice_POP(t *testing.T) {
+	s1, e := Slice.POP()
+	if !reflect.DeepEqual(s1, gostr.NewSlice([]string{"hello", "world", "hello"})) {
+		panic("test Slice.POP error")
+	}
+
+	if e != "china" {
+		panic("test Slice.POP error")
+	}
+}
